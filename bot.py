@@ -1,14 +1,28 @@
 import discord
 from discord.ext import commands
+import json
 
-bot=commands.Bot(commands_prefix="[")
+with open('setting.json', mode='r', encoding='utf8') as dfile:
+    ddata=json.load(dfile)
+
+bot=commands.Bot(command_prefix="[")
 
 @bot.event
 async def on_read():
     print(">> bot is online <<")
 
-bot.run(Njg3NjgwMzUxNTg1NDM1Njcx.Xmp_7g.ES5qwaIjpOKQw9rUjK8FLv11TP0)
+@bot.event
 
+async def on_member_join(member):
+    channel = bot.get_channel(687745243776417859)
+    await channel.send(f'{member} join!')
 
+async def on_member_remove(member):
+    channel = bot.get_channel(687745243776417859)
+    await channel.send(f'{member} leave!')
 
+@bot.command()
+async def ping(ctx):
+    await ctx.send(f'{round(bot.latency*1000)} (毫秒)')
 
+bot.run(ddata['Token'])
